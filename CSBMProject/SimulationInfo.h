@@ -146,6 +146,8 @@ private:
 		return string("output_files/output_simulation_") + to_string(id) + ".txt";
 	}
 
+	void printData(Configuration::SimulationType simulationType, RecordedData data, ofstream& cout);
+
 
 private:
 

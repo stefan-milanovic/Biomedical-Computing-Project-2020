@@ -298,29 +298,10 @@ const void SimulationInfo::outputToFile() {
 
 	cout.fill(' ');
 	for (RecordedData data : simulationData) {
-		cout << "|" << fixed << setw(7) << left << setprecision(3) << data.timestamp << "|";
-		cout << setw(13) << left << data.susceptible << "|";
-		if (simulationType != Configuration::SimulationType::SIR) {
-			cout << setw(9) << left << data.exposed << "|";
-		}
-		cout << setw(10) << left << data.infected << "|";
-		cout << setw(11) << left << data.recovered << "|";
-
-		if (simulationType != Configuration::SimulationType::SEIR_simplified) {
-			cout << setw(18) << left << data.total << "| ||| |";
-			cout << setw(8) << left << data.births << "|";
-			cout << setw(22) << left << data.deathsSuspectible << "|";
-			cout << setw(19) << left << data.deathsInfected << "|";
-			cout << setw(20) << left << data.deathsRecovered << "|";
-			cout << setw(27) << left << data.deathsDueToInfection << "|";
-			cout << setw(16) << left << data.deathsTotal << "|" << endl;
-		}
-		else {
-			cout << setw(18) << left << data.total << "|" << endl;
-		}
-		
+		printData(simulationType, data, cout);
 	}
 
+	cout << endl << "6) Simulation preview " << endl << "-------------------" << endl << endl;
 	cout << "| Time  | Susceptible |";
 	if (simulationType != Configuration::SimulationType::SIR) {
 		cout << " Exposed |";
@@ -334,10 +315,36 @@ const void SimulationInfo::outputToFile() {
 		cout << endl;
 	}
 
+	printData(simulationType, simulationData[0], cout);
+	printData(simulationType, simulationData[simulationData.size() - 1], cout);
+
 	cout.close();
 
 }
 
 void SimulationInfo::saveIteration(double currentTime) {
 	simulationData.push_back(RecordedData(currentTime, susceptible, exposed, infected, recovered, totalPopulation, births, diedS, diedI, diedR, diedDueToI, deathsTotal));
+}
+
+void SimulationInfo::printData(Configuration::SimulationType simulationType, RecordedData data, ofstream& cout) {
+	cout << "|" << fixed << setw(7) << left << setprecision(3) << data.timestamp << "|";
+	cout << setw(13) << left << data.susceptible << "|";
+	if (simulationType != Configuration::SimulationType::SIR) {
+		cout << setw(9) << left << data.exposed << "|";
+	}
+	cout << setw(10) << left << data.infected << "|";
+	cout << setw(11) << left << data.recovered << "|";
+
+	if (simulationType != Configuration::SimulationType::SEIR_simplified) {
+		cout << setw(18) << left << data.total << "| ||| |";
+		cout << setw(8) << left << data.births << "|";
+		cout << setw(22) << left << data.deathsSuspectible << "|";
+		cout << setw(19) << left << data.deathsInfected << "|";
+		cout << setw(20) << left << data.deathsRecovered << "|";
+		cout << setw(27) << left << data.deathsDueToInfection << "|";
+		cout << setw(16) << left << data.deathsTotal << "|" << endl;
+	}
+	else {
+		cout << setw(18) << left << data.total << "|" << endl;
+	}
 }

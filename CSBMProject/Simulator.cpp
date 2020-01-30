@@ -16,6 +16,8 @@ void Simulator::simulate() {
 	// Create the otuput directory (if it doesn't exist).
 	system("mkdir output_files");
 
+	// Create threads.
+
 	// For each simulation info.
 	for (unsigned i = 0; i < simulationInfos.size(); i++) {
 
@@ -25,7 +27,7 @@ void Simulator::simulate() {
 		// Save simulation info with time = 0.
 		simulationInfo.saveIteration(currentSimulatedTime);
 
-		while (config.getMaximumDuration() == 0 ? (currentSimulatedTime < config.getMaximumDuration() && simulationInfo.getInfectousCount() > 0) : simulationInfo.getInfectousCount() > 0) {
+		while (config.getMaximumDuration() != 0 ? (currentSimulatedTime < config.getMaximumDuration() && simulationInfo.getInfectousCount() > 0) : simulationInfo.getInfectousCount() > 0) {
 
 			simulationInfo.updateProbabilities();
 			currentSimulatedTime += simulationInfo.getTimeOfNextEvent();
