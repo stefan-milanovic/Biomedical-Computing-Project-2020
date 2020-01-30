@@ -115,6 +115,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ConfigFileParser.h" />
+    <ClInclude Include="Configuration.h" />
+    <ClInclude Include="json.hpp" />
+    <ClInclude Include="SimulationInfo.h" />
+    <ClInclude Include="SimulationThread.h" />
+    <ClInclude Include="Simulator.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config.conf" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ConfigFileParser.cpp" />
+    <ClCompile Include="Configuration.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="SimulationInfo.cpp" />
+    <ClCompile Include="SimulationThread.cpp" />
+    <ClCompile Include="Simulator.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="README.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
