@@ -2,6 +2,7 @@
 #include "SimulationInfo.h"
 #include <chrono>
 #include <string>
+#include <omp.h>
 
 void Simulator::simulate() {
 
@@ -17,9 +18,10 @@ void Simulator::simulate() {
 	system("mkdir output_files");
 
 	// Create threads.
-
+	
+#pragma omp parallel for num_threads(config.GetThreadCount())
 	// For each simulation info.
-	for (unsigned i = 0; i < simulationInfos.size(); i++) {
+	for (int i = 0; i < (int)simulationInfos.size(); i++) {
 
 		double currentSimulatedTime = 0;
 		SimulationInfo& simulationInfo = simulationInfos[i];
@@ -36,11 +38,16 @@ void Simulator::simulate() {
 
 			// Save iteration results for file output at the end of the simulation.
 			simulationInfo.saveIteration(currentSimulatedTime);
+
+			// End simulations lasting longer than two years.
+			if (currentSimulatedTime > 730) {
+				break;
+			}
 		}
 
 		simulationInfo.outputToFile();
 	}
-	
+
 
 	// Stop measuring time.
 	endTime = std::chrono::steady_clock::now();

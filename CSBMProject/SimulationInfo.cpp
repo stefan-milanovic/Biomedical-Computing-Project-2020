@@ -1,6 +1,7 @@
 #include "SimulationInfo.h"
 
 #include <random>
+#include <omp.h>
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -256,8 +257,8 @@ const void SimulationInfo::outputToFile() {
 	cout << "1) General info " << endl << "-------------------" << endl;
 	cout << "Simulation type: " << (simulationType == Configuration::SimulationType::SIR ?
 		"SIR" : simulationType == Configuration::SimulationType::SEIR ? "SEIR" : "SEIR_simplified") << endl;
-	cout << "Thread ID: " << endl;
-	cout << "Thread runtime (s): " << endl << endl;
+	cout << "Thread ID: " << omp_get_thread_num() << endl << endl;
+	// cout << "Thread runtime (s): " << endl << endl;
 
 	cout << "2) Initial populations " << endl << "-------------------" << endl;
 	cout << "Susceptible: " << simulationData[0].susceptible << endl;
