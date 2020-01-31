@@ -73,7 +73,7 @@ SimulationInfo::SimulationInfo(Configuration& config) {
 	}
 
 	auto events = config.getEvents();
-	// Initialise events.
+	// Initialise the events.
 	for (unsigned i = 0; i < events.size(); i++) {
 		if (events[i] != false) {
 			if (i == 0) {
@@ -266,7 +266,6 @@ const void SimulationInfo::outputTXT() {
 	cout << "Simulation type: " << (simulationType == Configuration::SimulationType::SIR ?
 		"SIR" : simulationType == Configuration::SimulationType::SEIR ? "SEIR" : "SEIR_simplified") << endl;
 	cout << "Thread ID: " << omp_get_thread_num() << endl << endl;
-	// cout << "Thread runtime (s): " << endl << endl;
 
 	cout << "2) Initial populations " << endl << "-------------------" << endl;
 	cout << "Susceptible: " << simulationData[0].susceptible << endl;

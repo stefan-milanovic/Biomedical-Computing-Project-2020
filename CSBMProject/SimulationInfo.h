@@ -9,6 +9,7 @@
 
 using namespace std;
 
+// A helper structure for holding data of each simulation stage.
 struct RecordedData {
 	double timestamp;
 	int susceptible;
@@ -28,6 +29,7 @@ struct RecordedData {
 	deathsInfected(diedI), deathsRecovered(diedR), deathsDueToInfection(diedToInf), deathsTotal(diedTotal) {}
 };
 
+// A helper structure for tracking events present in a simulation.
 struct Event {
 	bool occurred = false;
 	string eventName;
@@ -38,10 +40,10 @@ class SimulationInfo {
 
 public:
 
+	// Constructor.
 	SimulationInfo(Configuration& config);
 
-	// Getters.
-
+	// Getters methods.
 	const int getTotalPopulation() { return totalPopulation; }
 	const int getInfectedCount() { return infected; }
 	const int getSusceptibleCount() { return susceptible; }
@@ -58,18 +60,20 @@ public:
 	const double getIncubationPeriod() { return incubationPeriod; }
 	const double getInfectionRate() { return infectionRate; }
 
+	// Simulation methods.
 	void updateProbabilities();
 	double getTimeOfNextEvent();
 	void selectProcess();
 	void checkEvents(double time);
+	void saveIteration(double currentTime);
 
+	// Output methods.
 	const void outputToFile(string outputFormat);
 	
-	void saveIteration(double currentTime);
 
 private:
 
-	// SIR/SEIR process.
+	// SIR/SEIR process (S++).
 	const double birthChance() {
 
 		if (simulationType == Configuration::SimulationType::SEIR_simplified) {
@@ -77,10 +81,9 @@ private:
 		}
 
 		return mortalityRate * totalPopulation;
-		// S++
 	}
 
-	// SIR/SEIR process.
+	// SIR/SEIR process (S--).
 	const double deathOfSusceptibleChance() {
 
 		if (simulationType == Configuration::SimulationType::SEIR_simplified) {
@@ -88,10 +91,9 @@ private:
 		}
 
 		return mortalityRate * susceptible;
-		// S--
 	}
 
-	// SEIR/SEIR_simplified process (not in SIR).
+	// SEIR/SEIR_simplified process (not in SIR, E--, I++).
 	const double sicknessChance() {
 
 		if (simulationType == Configuration::SimulationType::SIR) {
@@ -99,10 +101,9 @@ private:
 		}
 
 		return incubationPeriod * exposed;
-		// E--, I++
 	}
 
-	// SIR/SEIR process.
+	// SIR/SEIR process (I--).
 	const double deathOfInfectedChance() {
 
 		if (simulationType == Configuration::SimulationType::SEIR_simplified) {
@@ -110,10 +111,9 @@ private:
 		}
 
 		return mortalityRate * infected;
-		// I--
 	}
 
-	// SIR/SEIR process.
+	// SIR/SEIR process (R--).
 	const double deathOfRecoveredChance() {
 
 		if (simulationType == Configuration::SimulationType::SEIR_simplified) {
@@ -121,20 +121,14 @@ private:
 		}
 
 		return mortalityRate * recovered;
-		// R--
 	}
 
-	// All processes.
+	// All processes (S--, I/E++).
 	const double infectionChance() {
 		return infectionRate * susceptible * infected / totalPopulation;
-
-		// if myworkingthread.mode() == Modes.SIR 
-		// S--, I++
-		// else
-		// S--, E++
 	}
 
-	// SEIR/SIR process.
+	// SEIR/SIR process (I--).
 	const double deathDueToInfectionChance() {
 
 		if (simulationType == Configuration::SimulationType::SEIR_simplified) {
@@ -142,15 +136,15 @@ private:
 		}
 
 		return infectedMortalityRate * infected;
-		// I--
 	}
 
-	// All processes.
+	// All processes (I--, R++).
 	const double recoveryChance() {
 		return recoveryRate * infected;
-		// I--, R++
 	}
 
+
+	// Private helper functions.
 	const string findFilename(string format) {
 		return string("output_files/output_simulation_") + to_string(id) + "." + format;
 	}
@@ -180,6 +174,7 @@ private:
 	double infectedMortalityRate;
 	double incubationPeriod;
 
+	// Elementary event list.
 	enum ElementaryEvent {
 		BIRTH,
 		DEATH_OF_SUSCEPTIBLE,

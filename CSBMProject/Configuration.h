@@ -10,31 +10,32 @@ class Configuration {
 
 public:
 
+	// The supported simulation types.
 	enum SimulationType {
 		SIR,
 		SEIR,
 		SEIR_simplified
 	};
 
+	// Constructor.
 	Configuration(string configFilename);
 
+
+	// Setter methods.
 	void setType(SimulationType simulationType) { type = simulationType; }
 	void setMaximumDuration(double maxDuration) { maximumDuration = maxDuration; }
 
 	void setNumberOfSimulations(int simulationCount) {
 		numberOfSimulations = simulationCount;
 	}
-
 	void setNumberOfThreads(int numberOfThreads) { threadCount = numberOfThreads; }
 
 	void addPopulationBoundary(vector<int> boundaries) {
 		populationBoundaries.push_back(boundaries);
 	}
-
 	void addParameterBoundary(vector<double> boundaries) {
 		parameterBoundaries.push_back(boundaries);
 	}
-
 	void addVaccinationTimestampBoundary(double boundary) {
 		vaccinationTimestampBoundaries.push_back(boundary);
 	}
@@ -46,9 +47,9 @@ public:
 	void addEvent(bool event) {
 		events.push_back(event);
 	}
-
 	void setOutputFormat(string format) { outputFormat = format; }
 
+	// Getter methods.
 	SimulationType getType() { return type; }
 	string getOutputFormat() { return outputFormat; }
 	double getMaximumDuration() { return maximumDuration; }
@@ -77,7 +78,6 @@ private:
 
 	vector<vector<int>> populationBoundaries;
 	vector<vector<double>> parameterBoundaries;
-
 
 	vector<bool> events;
 	vector<double> vaccinationTimestampBoundaries;

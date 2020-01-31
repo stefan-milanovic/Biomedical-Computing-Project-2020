@@ -19,8 +19,7 @@ void Simulator::simulate() {
 	// Create the otuput directory (if it doesn't exist).
 	system("mkdir output_files");
 
-	// Create threads.
-	
+	// Issue a pragma directive to the OpenMP library to create threads at this point.
 #pragma omp parallel for num_threads(config.GetThreadCount())
 	// For each simulation info.
 	for (int i = 0; i < (int)simulationInfos.size(); i++) {
@@ -49,7 +48,7 @@ void Simulator::simulate() {
 
 		simulationInfo.outputToFile(config.getOutputFormat());
 	}
-
+	// ---> Implicit thread synchronisation point.
 
 	// Stop measuring time.
 	endTime = std::chrono::steady_clock::now();

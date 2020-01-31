@@ -11,9 +11,12 @@ class Simulator {
 public:
 	Simulator(Configuration& conf) : config(conf) {}
 
+	// Main simulation function.
 	void simulate();
+
 private:
 
+	// Private helper functions.
 	void outputAggreggatedData();
 	void outputEnsembleData();
 
