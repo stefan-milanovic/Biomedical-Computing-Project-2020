@@ -28,8 +28,12 @@ void ConfigFileParser::parse() {
 		exit(1);
 	}
 
+	// Parse output file type.
+
+	config->setOutputFormat(configJson["general"]["OutputType"]);
+
 	// Parse duration.
-	config->setMaximumDuration(configJson["general"]["SimulationDuration"]["maximum_duration(days)"]);
+	config->setMaximumDuration(configJson["general"]["SimulationDuration"]["maximum_duration(time_units)"]);
 	config->setNumberOfSimulations(configJson["general"]["NumberOfSimulations"]);
 
 	// Parse number of threads.

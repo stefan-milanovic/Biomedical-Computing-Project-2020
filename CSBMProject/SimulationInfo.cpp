@@ -112,9 +112,6 @@ double SimulationInfo::getTimeOfNextEvent() {
 
 	// Get next time of event with an exponential random number generator.
 	std::default_random_engine generator;
-	if (chancesTotal <= 0) {
-		chancesTotal++; // ping;
-	}
 	std::exponential_distribution<double> distribution(chancesTotal);
 
 	return distribution(generator);
@@ -243,10 +240,21 @@ void SimulationInfo::checkEvents(double time) {
 	}
 }
 
-const void SimulationInfo::outputToFile() {
+const void SimulationInfo::outputToFile(string format) {
+
+	if (format == "txt") {
+		outputTXT();
+	}
+	else if (format == "csv") {
+		outputCSV();
+	}
+	
+}
+
+const void SimulationInfo::outputTXT() {
 
 	// Calculate filename.
-	string filename = findFilename();
+	string filename = findFilename("txt");
 
 	ofstream cout;
 
@@ -289,7 +297,7 @@ const void SimulationInfo::outputToFile() {
 		cout << " Exposed |";
 	}
 	cout << " Infected | Recovered | Total Population |";
-	
+
 	if (simulationType != Configuration::SimulationType::SEIR_simplified) {
 		cout << " ||| | Births | Deaths - Susceptible | Deaths - Infected | Deaths - Recovered | Deaths - Due To Infection | Deaths - Total | " << endl;
 	}
@@ -320,9 +328,57 @@ const void SimulationInfo::outputToFile() {
 	printData(simulationType, simulationData[simulationData.size() - 1], cout);
 
 	cout.close();
-
 }
 
+const void SimulationInfo::outputCSV() {
+	
+	string filename = findFilename("csv");
+
+	ofstream cout;
+
+	cout.open(filename);
+
+	cout << "Time,Susceptible";
+	if (simulationType != Configuration::SimulationType::SIR) {
+		cout << ",Exposed";
+	}
+	cout << ",Infected,Recovered,Total Population";
+	if (simulationType != Configuration::SimulationType::SEIR_simplified) {
+		cout << ",Births,Deaths - Susceptible, Deaths - Infected, Deaths - Recovered, Deaths - Due to Infection, Deaths - Total" << endl;
+	}
+	else {
+		cout << endl;
+	}
+
+	cout.fill(' ');
+
+	for (RecordedData data : simulationData) {
+		cout << data.timestamp << ",";
+		cout << data.susceptible << ",";
+		if (simulationType != Configuration::SimulationType::SIR) {
+			cout << data.exposed << ",";
+		}
+		cout << data.infected << ",";
+		cout << data.recovered << ",";
+
+		if (simulationType != Configuration::SimulationType::SEIR_simplified) {
+			cout << data.total << ",";
+			cout << data.births << ",";
+			cout << data.deathsSuspectible << ",";
+			cout << data.deathsInfected << ",";
+			cout << data.deathsRecovered << ",";
+			cout << data.deathsDueToInfection << ",";
+			cout << data.deathsTotal << endl;
+		}
+		else {
+			cout << data.total << endl;
+		}
+		
+	}
+
+	cout.close();
+
+}
 void SimulationInfo::saveIteration(double currentTime) {
 	simulationData.push_back(RecordedData(currentTime, susceptible, exposed, infected, recovered, totalPopulation, births, diedS, diedI, diedR, diedDueToI, deathsTotal));
 }

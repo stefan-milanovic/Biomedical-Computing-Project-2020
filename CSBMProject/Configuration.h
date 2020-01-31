@@ -47,7 +47,10 @@ public:
 		events.push_back(event);
 	}
 
+	void setOutputFormat(string format) { outputFormat = format; }
+
 	SimulationType getType() { return type; }
+	string getOutputFormat() { return outputFormat; }
 	double getMaximumDuration() { return maximumDuration; }
 	int getNumberOfSimulations() { return numberOfSimulations; }
 
@@ -64,6 +67,8 @@ public:
 private:
 
 	SimulationType type;
+	string outputFormat;
+
 	double maximumDuration;
 
 	int numberOfSimulations;

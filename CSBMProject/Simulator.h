@@ -14,6 +14,9 @@ public:
 	void simulate();
 private:
 
+	void outputAggreggatedData();
+	void outputEnsembleData();
+
 	long maximumTime;
 	Configuration config;
 

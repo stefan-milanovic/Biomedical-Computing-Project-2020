@@ -50,12 +50,21 @@ public:
 
 	const int getInfectousCount() { return infected + exposed; }
 
+	const vector<RecordedData> getSimulationData() { return simulationData; }
+
+	const double getMortalityRate() { return mortalityRate; }
+	const double getInfectedMortalityRate() { return infectedMortalityRate; }
+	const double getRecoveryRate() { return recoveryRate; }
+	const double getIncubationPeriod() { return incubationPeriod; }
+	const double getInfectionRate() { return infectionRate; }
+
 	void updateProbabilities();
 	double getTimeOfNextEvent();
 	void selectProcess();
 	void checkEvents(double time);
 
-	const void outputToFile();
+	const void outputToFile(string outputFormat);
+	
 	void saveIteration(double currentTime);
 
 private:
@@ -142,12 +151,14 @@ private:
 		// I--, R++
 	}
 
-	const string findFilename() {
-		return string("output_files/output_simulation_") + to_string(id) + ".txt";
+	const string findFilename(string format) {
+		return string("output_files/output_simulation_") + to_string(id) + "." + format;
 	}
 
 	void printData(Configuration::SimulationType simulationType, RecordedData data, ofstream& cout);
 
+	const void outputTXT();
+	const void outputCSV();
 
 private:
 
